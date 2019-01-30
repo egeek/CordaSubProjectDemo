@@ -1,0 +1,4 @@
+rootProject.name = 'SubProjectDemo'
+
+include 'parent:child1'
+include 'parent:child2'

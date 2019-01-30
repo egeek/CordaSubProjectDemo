@@ -1,0 +1,87 @@
+buildscript {
+    ext {
+        corda_release_version = '3.3-corda'
+        corda_gradle_plugins_version = '4.0.39'
+//        corda_gradle_plugins_version = '3.2.1'
+        kotlin_version = '1.2.71'
+        quasar_version = '0.7.6'
+
+        allRepositories = {
+            mavenLocal()
+            jcenter()
+            mavenCentral()
+            maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases' }
+        }
+    }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.2.71'
+}
+
+repositories allRepositories
+
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+group 'co.egeek.corda.bug.gradle.plugin'
+version '1.0-SNAPSHOT'
+
+subprojects { subProject ->
+    buildscript {
+        repositories allRepositories
+    }
+
+    repositories allRepositories
+
+    ext {
+        withoutKotlin = {
+            exclude group: 'org.jetbrains.kotlin'
+        }
+    }
+
+    apply plugin: 'kotlin'
+
+    version = rootProject.version
+
+    dependencies {
+        compile "io.github.microutils:kotlin-logging:1.6.22", withoutKotlin
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    }
+
+    compileKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+    compileTestKotlin {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+//
+    jar {
+//        duplicatesStrategy = DuplicatesStrategy.FAIL
+        duplicatesStrategy = DuplicatesStrategy.WARN
+    }
+
+}
+
+configurations {
+    compile.resolutionStrategy {
+        failOnVersionConflict()
+
+        eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'org.jetbrains.kotlin') {
+                details.useVersion kotlin_version
+            }
+        }
+        force "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+        force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+        force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+        force "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+        force "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+        dependencySubstitution {
+            substitute module('org.jetbrains.kotlin:kotlin-stdlib-jre8:1.1.60') with module("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
+            substitute module('org.jetbrains.kotlin:kotlin-stdlib-jre7:1.1.60') with module("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version")
+        }
+    }
+}
