@@ -184,9 +184,9 @@ co/egeek/corda/bug/gradle/plugin/child2/Child2State.class
 The output of corda-gradle-plugin 4.0.39 is quite different to 3.2.1
 
 | Test          | Result
-| --------------|---
+| --------------|--------------------------------------------------------------------------------------------|
 | compile       | JAR is 17.1MB, doesn't contain Corda (good), but contains duplicated classes (e.g. Kotlin 
-Logging & BeanUtils)
+|               | Logging & BeanUtils)
 | cordapp       | JAR is 5.3KB and only contains Child2 classes, no dependencies!
 | cordaCompile  | JAR is 5.3KB and only contains Child2 classes, no dependencies!
 
