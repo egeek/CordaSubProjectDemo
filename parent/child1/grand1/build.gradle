@@ -15,7 +15,7 @@ dependencies {
     // all of the downstream JARs end up including Corda and all of its dependencies!
 
 //    cordaCompile "net.corda:corda-core:$corda_release_version", withoutKotlin
-    compile "net.corda:corda-core:$corda_release_version", withoutKotlin
+    compileOnly "net.corda:corda-core:$corda_release_version", withoutKotlin
 //    cordaRuntime "net.corda:corda:$corda_release_version", withoutKotlin
 
     compile "commons-beanutils:commons-beanutils:1.9.3"

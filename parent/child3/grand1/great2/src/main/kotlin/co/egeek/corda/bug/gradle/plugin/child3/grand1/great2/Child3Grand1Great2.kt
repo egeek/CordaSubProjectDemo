@@ -2,9 +2,11 @@ package co.egeek.corda.bug.gradle.plugin.child3.grand1.great2
 
 import co.egeek.corda.bug.gradle.plugin.child1.grand2.ICanLogAgain
 import mu.KotlinLogging
+import net.corda.core.serialization.CordaSerializable
 import org.apache.commons.beanutils.BeanUtils
 
-class Child3Grand1Great2 :
+@CordaSerializable
+open class Child3Grand1Great2 :
     ICanLogAgain {
 
     override fun logMessageAgain() {
