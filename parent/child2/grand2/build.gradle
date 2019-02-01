@@ -1,0 +1,88 @@
+buildscript {
+    dependencies {
+        classpath "net.corda.plugins:cordapp:$corda_gradle_plugins_version"
+        classpath "net.corda.plugins:quasar-utils:$corda_gradle_plugins_version"
+    }
+}
+
+apply plugin: 'net.corda.plugins.cordapp'
+apply plugin: 'net.corda.plugins.quasar-utils'
+
+group = 'co.egeek.corda.bug.gradle.plugin.child2'
+
+dependencies {
+    cordaCompile "net.corda:corda-core:$corda_release_version", withoutKotlin
+    cordaRuntime "net.corda:corda:$corda_release_version", withoutKotlin
+
+//    cordaCompile project(':parent:child1')
+//    cordapp project(':parent:child1')
+
+
+
+
+    // TODO SJH - adding this line causes the error
+//    cordapp project (':parent:child2:grand1')
+    /*
+
+w: Some JAR files in the classpath have the Kotlin Runtime library bundled into them. This may cause difficult to debug problems if there's a different version of the Kotlin Runtime library in the classpath. Consider removing these libraries from the classpath
+w: C:\Users\egeek\Development\r3\SubProjectDemo\parent\child2\grand1\build\libs\grand1-1.0-SNAPSHOT.jar: Library has Kotlin runtime bundled into it
+
+     */
+
+    /*
+    But it's not the cause of the issue, only highlighting it. With this option turned
+    on, the resultant size of grand.jar is correct, and does not include Corda, Kotlin or
+    any other dependencies
+
+    (path is parent/child2/grand2/build/libs)
+    -rwxrwxrwx 1 steve steve 20626 Feb  1 09:41 grand2-1.0-SNAPSHOT.jar
+    
+    with it turned off, the JAR file size is wrong (even though no warning is given)
+    
+    (path is parent/child2/grand2/build/libs)
+    -rwxrwxrwx 1 steve steve 4597120 Feb  1 09:42 grand2-1.0-SNAPSHOT.jar
+    
+    
+    HOWEVER, regardless of whether this setting is on or off, the size of grand1.jar
+    is always wrong!
+    
+    (path is parent/child2/grand1/build/libs) - above cordapp setting on 
+    -rwxrwxrwx 1 steve steve 4582295 Feb  1 09:40 grand1-1.0-SNAPSHOT.jar
+
+    (path is parent/child2/grand1/build/libs) - above cordapp setting off
+    -rwxrwxrwx 1 steve steve 4582295 Feb  1 09:41 grand1-1.0-SNAPSHOT.jar
+    
+    
+    
+    
+    parent/child2/grand1's build.gradle file does not reference any other cordapps, instead
+    it only includes the parent/child1/grand1 project.
+    
+    So in summary:
+    
+    * parent/child1/grand1 - this is a utility project, that needs to 
+      include Corda for some reason at compile time (e.g. it may be a project containing 
+      CordaSerializable objects and needs the annotation)
+    * parent/child2/grand1 - this is a CorDapp that uses parent/child1/grand1 (e.g.
+      a State & Contract CorDapp)
+    * parent/child2/grand2 - this is a CorDapp that uses parent/child2/grand2 (e.g.
+      a Flow CorDapp)
+      
+      
+    
+    
+    
+    */
+
+
+    compile project(':parent:child1:grand1')
+    compile project(':parent:child3:grand1:great1')
+    compile project(':parent:child3:grand1:great2')
+    compile project(':parent:child1:grand2')
+}
+
+cordapp {
+    targetPlatformVersion 4
+    minimumPlatformVersion 4
+    signing.enabled false
+}

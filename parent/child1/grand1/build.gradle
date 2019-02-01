@@ -1,0 +1,28 @@
+//buildscript {
+//    dependencies {
+//        classpath "net.corda.plugins:cordapp:$corda_gradle_plugins_version"
+//        classpath "net.corda.plugins:quasar-utils:$corda_gradle_plugins_version"
+//    }
+//}
+//
+//apply plugin: 'net.corda.plugins.cordapp'
+//apply plugin: 'net.corda.plugins.quasar-utils'
+
+group = 'co.egeek.corda.bug.gradle.plugin.child1'
+
+dependencies {
+    // TODO SJH - If this is changed to cordaCompile instead of compile then
+    // all of the downstream JARs end up including Corda and all of its dependencies!
+
+//    cordaCompile "net.corda:corda-core:$corda_release_version", withoutKotlin
+    compile "net.corda:corda-core:$corda_release_version", withoutKotlin
+//    cordaRuntime "net.corda:corda:$corda_release_version", withoutKotlin
+
+    compile "commons-beanutils:commons-beanutils:1.9.3"
+}
+//
+//cordapp {
+//    targetPlatformVersion 4
+//    minimumPlatformVersion 4
+//    signing.enabled false
+//}

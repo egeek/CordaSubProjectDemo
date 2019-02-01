@@ -1,4 +1,10 @@
 rootProject.name = 'SubProjectDemo'
 
-include 'parent:child1'
-include 'parent:child2'
+include 'parent:child1:grand1'
+include 'parent:child1:grand2'
+include 'parent:child2:grand1'
+include 'parent:child2:grand2'
+include 'parent:child3'
+include 'parent:child3:grand1:great1'
+include 'parent:child3:grand1:great2'
+include 'parent:child3:grand2:great1'

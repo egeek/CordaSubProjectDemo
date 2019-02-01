@@ -1,0 +1,32 @@
+buildscript {
+    dependencies {
+        classpath "net.corda.plugins:cordapp:$corda_gradle_plugins_version"
+        classpath "net.corda.plugins:quasar-utils:$corda_gradle_plugins_version"
+    }
+}
+
+apply plugin: 'net.corda.plugins.cordapp'
+apply plugin: 'net.corda.plugins.quasar-utils'
+
+group = 'co.egeek.corda.bug.gradle.plugin.child2'
+dependencies {
+    cordaCompile "net.corda:corda-core:$corda_release_version", withoutKotlin
+    cordaRuntime "net.corda:corda:$corda_release_version", withoutKotlin
+
+//    cordaCompile project(':parent:child1')
+//    cordapp project(':parent:child1')
+
+    compile project(':parent:child1:grand1')
+
+    // TODO SJH - Note if you change from compile to cordapp then the resultant
+    // JAR file does not include any of the classes from parent/child1/grand1. We
+    // need them to be included as they are not a separate CorDapp
+//    cordapp project(':parent:child1:grand1')
+}
+
+
+cordapp {
+    targetPlatformVersion 4
+    minimumPlatformVersion 4
+    signing.enabled false
+}
